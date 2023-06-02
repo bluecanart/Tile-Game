@@ -1,25 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import TileGrid from './components/TileGrid';
+import HostGrid from './components/HostGrid';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const queryParameters = new URLSearchParams(window.location.search);
+  const type = queryParameters.get("type");
+
+  if(type === 'host') {
+    return (
+      <div className="App">
+        <HostGrid />
+      </div>
+    );
+  } else {
+    return (
+      <div className="App">
+        <TileGrid />
+      </div>
+    );
+  }
 }
 
 export default App;

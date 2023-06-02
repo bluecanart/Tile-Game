@@ -24,14 +24,12 @@ const ScoreContainer = styled.div`
   font-size: 2vw;
 `;
 
-const Score = styled.div`
-  margin: 1vw 0;
-`;
-
 const Button = styled.button`
   font-size: 2vw;
   padding: 1vw;
-  border-radius: 2rem;
+  border-radius: 1vw;
+  border: 0;
+  box-shadow: 0.2vw 0.2vw 0.35vw 0vw rgba(0, 0, 25, 0.2);
 `;
 
 function TileGrid() {

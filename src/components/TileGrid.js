@@ -12,8 +12,8 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-gap: 1vw;
-  background-color: lightgrey;
-  padding: 1vw;
+  background-color: rgb(235, 235, 255);
+  padding: 2vw;
 `;
 
 const ScoreContainer = styled.div`
@@ -31,6 +31,7 @@ const Score = styled.div`
 const Button = styled.button`
   font-size: 2vw;
   padding: 1vw;
+  border-radius: 2rem;
 `;
 
 function TileGrid() {
@@ -80,7 +81,7 @@ function TileGrid() {
       <ScoreContainer>
         {colors.map(color => (
             <p style={{color: color}} key={color}>
-            {color}: {colorCounts[color]}
+            {color.slice(0, 1).toUpperCase() + color.slice(1)}: {colorCounts[color]}
             </p>
         ))}
         <Button onClick={resetTiles}>Reset</Button>

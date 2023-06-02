@@ -45,14 +45,15 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-gap: 1vw;
-  background-color: lightgrey;
-  padding: 1vw;
+  background-color: rgb(235, 235, 255);
+  padding: 2vw;
 `;
 
 const Button = styled.button`
   font-size: 2vw;
   padding: 1vw;
   margin: 1vw;
+  border-radius: 2rem;
 `;
 
 function HostGrid() {

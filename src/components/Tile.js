@@ -11,10 +11,11 @@ const TileContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  border: 1px solid black;
+  border-radius: 2rem;
   margin: 0.2vw;
-  padding: 1vw 1vw;
+  padding: 0.5vw 1vw;
   background-color: ${props => props.color};
+  box-shadow: 10px 10px 15px 1px rgba(0, 0, 25, 0.2);
   color: ${props => isDark(props.color) ? 'white' : 'black'};
 `;
 
@@ -31,6 +32,7 @@ const ButtonContainer = styled.div`
 
 const Button = styled.button`
   width: 20%;
+  border-radius: 1rem;
   height: 2vw;
   background-color: ${props => props.color};
 `;

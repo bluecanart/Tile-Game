@@ -4,9 +4,10 @@ import styled from 'styled-components';
 const TileContainer = styled.div`
   width: 16vw;
   height: 6vw;
-  border: 1px solid black;
   margin: 0.2vw;
-  padding: 1vw 1vw;
+  padding: 0.5vw 1vw;
+  border-radius: 2rem;
+  box-shadow: 10px 10px 15px 1px rgba(0, 0, 25, 0.2);
   background-color: ${props => props.color};
 `;
 

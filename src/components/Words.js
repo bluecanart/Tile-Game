@@ -499,9 +499,6 @@ let nouns = [
   'Day',
   'Place',
   'Number',
-  '',
-  ' ',
-  '',
   'Part',
   'Field',
   'Fish',
@@ -1002,7 +999,6 @@ let nouns = [
   'League',
   'Mail',
   'Mess',
-  '',
   'Native',
   'Opening',
   'Parent',
@@ -1146,12 +1142,12 @@ let nouns = [
   'Tower',
   'Truck',
   'Witness',
-  'A',
-  'You',
+  //'A',
+  //'You',
   'It',
   'Can',
   'Will',
-  'If',
+  //'If',
   'One',
   'Many',
   'Most',
@@ -1505,6 +1501,16 @@ let nouns = [
   'Drunk'
 ];
 
-export function getRandomNoun() {
-    return nouns[Math.floor(Math.random() * nouns.length)];
+export function* wordGenerator() {
+    let words = Object.assign([], nouns);
+    while(true) {
+      if(words.length > 0) {
+        const RAND_INDEX = Math.floor(Math.random() * words.length);
+        const RAND_WORD = words[RAND_INDEX];
+        words.splice(RAND_INDEX, 1);
+        yield RAND_WORD;
+      } else {
+        yield '';
+      }
+    }
 }

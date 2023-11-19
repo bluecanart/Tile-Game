@@ -1,3 +1,4 @@
+//Merged into Tile and deprecated
 import React from 'react';
 import styled from 'styled-components';
 

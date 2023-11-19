@@ -1,3 +1,4 @@
+//Merged into TileGrid and deprecated
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import SimpleTile from './SimpleTile';

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Tile from './Tile';
-import {wordGenerator} from './Words';
+import {wordGenerator, gameTypes} from './Words';
 
 const shuffleArray = array => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -34,8 +34,8 @@ const tileColors = [
   ...Array(STARTING_AMOUNTS[COLOR_BLACK]).fill(COLOR_BLACK),
 ];
 
-const getTileArray = () => {
-  const wordGen = wordGenerator();
+const getTileArray = (gameType) => {
+  const wordGen = wordGenerator(gameType);
   shuffleArray(tileColors);
   return tileColors.map(color => ({
     color, 
@@ -71,8 +71,17 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
+const TypeSelector = styled.select`
+  font-size: 2vw;
+  border-radius: 1vw;
+  padding: 1vw;
+  border: 0;
+  box-shadow: 0.2vw 0.2vw 0.35vw 0vw rgba(0, 0, 25, 0.2);
+`;
+
 function TileGrid() {
-  const [tiles, setTiles] = useState(getTileArray());
+  const [selectedGameType, setSelectedGameType] = useState(gameTypes[0]);
+  const [tiles, setTiles] = useState(getTileArray(selectedGameType));
   const [activeView, setActiveView] = useState(STARTING_MODE);
 
   const revealTile = (index) => {
@@ -86,13 +95,17 @@ function TileGrid() {
   };
 
   const resetGame = () => {
-    setTiles(getTileArray());
+    setTiles(getTileArray(selectedGameType));
     setActiveView(STARTING_MODE)
   };
 
   const switchView = () => {
     setActiveView(activeView === MODE_CLUE ? MODE_GUESS : MODE_CLUE);
   }
+
+  useEffect(() => {
+    resetGame();
+  }, [selectedGameType]);
 
   return (
     <div>
@@ -107,6 +120,13 @@ function TileGrid() {
             {color.slice(0, 1).toUpperCase() + color.slice(1)}: {tiles.filter((tile) => tile.revealed && tile.color === color).length}/{STARTING_AMOUNTS[color]}
             </p>
         ))}
+        <TypeSelector value={selectedGameType} onChange={e => setSelectedGameType(e.target.value)}>
+          {gameTypes.map((gameType, index) => (
+            <option key={index} value={gameType}>
+              {gameType}
+            </option>
+          ))}
+        </TypeSelector>
         <Button onClick={switchView}>Switch to {(activeView === MODE_CLUE ? MODE_GUESS : MODE_CLUE)} View</Button>
         <Button onClick={resetGame}>Reset</Button>
       </ScoreContainer>

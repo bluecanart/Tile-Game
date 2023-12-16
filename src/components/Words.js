@@ -1,4 +1,9 @@
-let nouns = [
+const gameTypes = [
+  'Standard',
+  'Salesforce'
+];
+
+let standardWords = [
   'People',
   'History',
   'Way',
@@ -1501,8 +1506,129 @@ let nouns = [
   'Drunk'
 ];
 
-export function* wordGenerator() {
-    let words = Object.assign([], nouns);
+let salesforceWords = [
+  'Apex',
+  'Aura',
+  'Batch',
+  'LWC',
+  'Flow',
+  'Lightning',
+  'Process Builder',
+  'Workflow Rule',
+  'Trigger',
+  'Visualforce',
+  'Community',
+  'Developer',
+  'Admin',
+  'Sales',
+  'Service',
+  'Marketing',
+  'Commerce',
+  'Analytics',
+  'Einstein',
+  'Heroku',
+  'Mulesoft',
+  'Tableau',
+  'OmniStudio',
+  'Orchestrator',
+  'Object',
+  'Record',
+  'Field',
+  'Formula',
+  'Validation',
+  'Record Type',
+  'Page Layout',
+  'Sharing',
+  'Permission Set',
+  'Profile',
+  'Role',
+  'Queue',
+  'Public Group',
+  'Queueable',
+  'Future',
+  'List View',
+  'Report',
+  'Dashboard',
+  'Lightning Page',
+  'User',
+  'Account',
+  'Contact',
+  'Lead',
+  'Opportunity',
+  'Case',
+  'Campaign',
+  'Contract',
+  'Asset',
+  'Product',
+  'Price Book',
+  'Order',
+  'Quote',
+  'Invoice',
+  'Entitlement',
+  'Approval Process',
+  'Chatter',
+  'File',
+  'Folder',
+  'Email Template',
+  'Recursion',
+  'Governor Limit',
+  'SOQL',
+  'SOSL',
+  'DML',
+  'Assignment Rule',
+  'Picklist',
+  'Multi-Select Picklist',
+  'Lookup',
+  'Master-Detail',
+  'Roll-Up Summary',
+  'Formula',
+  'Field History Tracking',
+  'App Builder',
+  'AppExchange',
+  'Asynchronous',
+  'Bulk API',
+  'Knowledge',
+  'CSS',
+  'Code Coverage',
+  'Developer Console',
+  'Tab',
+  'Platform Event',
+  'External Object',
+  'Field History Tracking',
+  'Field-Level Security',
+  'HTML',
+  'Import Wizard',
+  'Organization Wide Default',
+  'Sandbox',
+  'Org',
+  'System Administrator',
+  'Data Loader',
+  'Text Area',
+  'Deployment',
+  'Metadata',
+  'Unit Test',
+  'Static Resource',
+  'Custom Metadata',
+  'Custom Setting',
+  'Custom Label',
+  'UAT',
+  'QA',
+  'Web-to-Lead',
+  'Web-to-Case',
+  'XML'
+];
+
+function* wordGenerator(gameType = 'Standard') {
+    let words;
+    switch(gameType) {
+      case 'Salesforce':
+        words = Object.assign([], salesforceWords);
+        break;
+      default:
+        words = Object.assign([], standardWords);
+        break;
+    }
+
     while(true) {
       if(words.length > 0) {
         const RAND_INDEX = Math.floor(Math.random() * words.length);
@@ -1514,3 +1640,5 @@ export function* wordGenerator() {
       }
     }
 }
+
+export { gameTypes, wordGenerator };

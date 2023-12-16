@@ -8,7 +8,7 @@ const TileContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
   border-radius: 1vw;
   margin: 0.2vw;
   padding: 0.5vw 1vw;
@@ -29,6 +29,7 @@ const TextContainer = styled.p`
   font-size: 2vw;
   font-weight: 400;
   margin: 0;
+  text-align: center;
 `;
 
 const getColor = (color, isRevealed) => {

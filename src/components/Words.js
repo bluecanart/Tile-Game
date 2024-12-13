@@ -1,6 +1,16 @@
+import { Groq } from 'groq-sdk';
+
+const getQuery = (category) => `Generate a list of 30 words that fit the theme of '${category}'. Return the data in a JSON array matching the format specified.
+
+Example Format
+{
+  "words": ["word1", "word2", "word3"]
+}`;
+
 const gameTypes = [
   'Standard',
-  'Salesforce'
+  'Salesforce',
+  'Custom'
 ];
 
 let standardWords = [
@@ -1618,27 +1628,70 @@ let salesforceWords = [
   'XML'
 ];
 
-function* wordGenerator(gameType = 'Standard') {
-    let words;
-    switch(gameType) {
-      case 'Salesforce':
-        words = Object.assign([], salesforceWords);
-        break;
-      default:
-        words = Object.assign([], standardWords);
-        break;
-    }
+async function fetchCustomWords(category, apiKey) {
+  const groq = new Groq({
+    apiKey,
+    dangerouslyAllowBrowser: true
+  });
 
-    while(true) {
-      if(words.length > 0) {
-        const RAND_INDEX = Math.floor(Math.random() * words.length);
-        const RAND_WORD = words[RAND_INDEX];
-        words.splice(RAND_INDEX, 1);
-        yield RAND_WORD;
-      } else {
-        yield '';
-      }
+  const query = getQuery(category);
+  const messages = [
+    {
+      role: 'user',
+      content: query
     }
+  ]
+  const response = await groq.chat.completions.create({
+    messages,
+    model: 'llama3-8b-8192',
+    temperature: 1,
+    max_tokens: 1024,
+    top_p: 1,
+    stream: false,
+    stop: null,
+    response_format: {
+      "type": "json_object"
+    }
+  });
+
+  let words = JSON.parse(response.choices[0].message.content);
+
+  if(typeof words !== 'object' || !Array.isArray(words?.words)) {
+    throw new Error('Invalid response from API');
+  }
+
+  //Capitalize the first letter of each word
+  return words.words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
+}
+
+async function* wordGenerator(gameType = 'Standard', customCategory = 'dog', apiKey = '') {
+  let words;
+  switch(gameType) {
+    case 'Salesforce':
+      words = Object.assign([], salesforceWords);
+      break;
+    case 'Custom':
+      if (customCategory && apiKey) {
+        words = await fetchCustomWords(customCategory, apiKey);
+      } else {
+        words = [];
+      }
+      break;
+    default:
+      words = Object.assign([], standardWords);
+      break;
+  }
+
+  while(true) {
+    if(words.length > 0) {
+      const RAND_INDEX = Math.floor(Math.random() * words.length);
+      const RAND_WORD = words[RAND_INDEX];
+      words.splice(RAND_INDEX, 1);
+      yield RAND_WORD;
+    } else {
+      yield '';
+    }
+  }
 }
 
 export { gameTypes, wordGenerator };

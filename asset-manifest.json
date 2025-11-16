@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/Tile-Game/static/css/main.e6c13ad2.css",
-    "main.js": "/Tile-Game/static/js/main.3651b398.js",
+    "main.js": "/Tile-Game/static/js/main.d555aa58.js",
     "static/js/787.8f72c3c4.chunk.js": "/Tile-Game/static/js/787.8f72c3c4.chunk.js",
     "index.html": "/Tile-Game/index.html",
     "main.e6c13ad2.css.map": "/Tile-Game/static/css/main.e6c13ad2.css.map",
-    "main.3651b398.js.map": "/Tile-Game/static/js/main.3651b398.js.map",
+    "main.d555aa58.js.map": "/Tile-Game/static/js/main.d555aa58.js.map",
     "787.8f72c3c4.chunk.js.map": "/Tile-Game/static/js/787.8f72c3c4.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.3651b398.js"
+    "static/js/main.d555aa58.js"
   ]
 }

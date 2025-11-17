@@ -7,6 +7,9 @@ const AppStyle = styled.div`
   background-image: ${props => BACKGROUND_GRADIENTS[props.winningColor] || BACKGROUND_GRADIENTS.default};
   min-height: 100vh;
   padding: 1vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 function App() {

@@ -68,7 +68,7 @@ const ScoreContainer = styled.div`
   font-size: 2vw;
   flex-wrap: wrap;
   background-color: rgba(255, 255, 255, 0.4);
-  margin: 1.5vw auto;
+  margin: 1.5vw auto 0 auto;
   gap: 1.5vw;
   padding: 1.5vw;
   color: white;

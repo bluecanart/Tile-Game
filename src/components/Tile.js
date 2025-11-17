@@ -4,8 +4,9 @@ import { TILE_COLORS, DARK_TEXT_COLORS } from '../constants/colors';
 
 const TileContainer = styled.div`
   overflow: hidden;
+  box-shadow: 0.2vw 0.4vw 0.8vw rgba(0, 0, 0, 0.25);
   width: 17vw;
-  height: 6.2vw;
+  height: 7vw;
   display: flex;
   flex-direction: column;
   align-items: center;

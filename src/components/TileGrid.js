@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import Tile from './Tile';
 import {wordGenerator, gameTypes} from './Words';
+import { BRAND_COLORS, SCORE_COLORS } from '../constants/colors';
 
 const shuffleArray = array => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -45,35 +46,81 @@ const getTileArray = async (gameType, customCategory, apiKey) => {
   return tiles;
 }
 
-const GRID_BACKGROUND_DEFAULT = 'rgb(235, 235, 255)';
-
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-gap: 1vw;
-  background-color: ${GRID_BACKGROUND_DEFAULT};
-  padding: 2vw;
+  background-color: rgba(255, 255, 255, 0.4);
+  padding: 1.5vw;
+  margin: auto;
+  max-width: 96vw;
+  border-radius: 2vw;
+  box-shadow: 0 2vw 4vw rgba(0, 0, 0, 0.15);
+  border: 0.1vw solid rgba(255, 255, 255, 0.8);
 `;
 
 const ScoreContainer = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 100%;
+  max-width: 96vw;
+  border-radius: 2vw;
   font-size: 2vw;
+  flex-wrap: wrap;
+  background-color: rgba(255, 255, 255, 0.4);
+  margin: 1.5vw auto;
+  gap: 1.5vw;
+  padding: 1.5vw;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 2vw 4vw rgba(0, 0, 0, 0.15);
+  border: 0.1vw solid rgba(255, 255, 255, 0.8);
+  p {
+    margin: 0;
+  }
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
 `;
 
+const ColorContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 2vw;
+  padding: 1vw 2vw;
+  align-items: flex-start;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 1vw;
+  box-shadow: 0.2vw 0.4vw 0.8vw rgba(0, 0, 0, 0.15);
+  font-weight: 600;
+  font-size: 2vw;
+`;
+
+const Color = styled.div`
+  color: ${props => props.color || 'black'};
+  font-weight: 600;
+  font-size: 2vw;
+`;
+
 const Button = styled.button`
   font-size: 2vw;
-  padding: 1vw;
+  padding: 1vw 2vw;
   border-radius: 1vw;
   border: 0;
-  box-shadow: 0.2vw 0.2vw 0.35vw 0vw rgba(0, 0, 25, 0.2);
+  background: linear-gradient(135deg, ${BRAND_COLORS.primary} 0%, ${BRAND_COLORS.primaryDark} 100%);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0.2vw 0.4vw 0.8vw rgba(0, 0, 0, 0.25);
   cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover:not(:disabled) {
+    transform: translateY(-0.2vw);
+    box-shadow: 0.2vw 0.6vw 1.2vw rgba(0, 0, 0, 0.35);
+  }
+  &:active:not(:disabled) {
+    transform: translateY(0.1vw);
+  }
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -85,7 +132,19 @@ const TypeSelector = styled.select`
   border-radius: 1vw;
   padding: 1vw;
   border: 0;
-  box-shadow: 0.2vw 0.2vw 0.35vw 0vw rgba(0, 0, 25, 0.2);
+  background: white;
+  color: #333;
+  font-weight: 600;
+  box-shadow: 0.2vw 0.4vw 0.8vw rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover:not(:disabled) {
+    transform: translateY(-0.2vw);
+    box-shadow: 0.2vw 0.6vw 1.2vw rgba(0, 0, 0, 0.25);
+  }
+  &:active:not(:disabled) {
+    transform: translateY(0.1vw);
+  }
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -97,7 +156,14 @@ const CustomCategorySelector = styled.input`
   border-radius: 1vw;
   padding: 1vw;
   border: 0;
-  box-shadow: 0.2vw 0.2vw 0.35vw 0vw rgba(0, 0, 25, 0.2);
+  background: white;
+  color: #333;
+  box-shadow: 0.2vw 0.4vw 0.8vw rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  &:focus {
+    outline: none;
+    box-shadow: 0.2vw 0.6vw 1.2vw rgba(102, 126, 234, 0.4);
+  }
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -105,13 +171,13 @@ const CustomCategorySelector = styled.input`
 `;
 
 const Spinner = styled.div`
-  border: 0.4vw solid rgba(0, 0, 0, 0.1);
-  border-left-color: #000;
+  border: 0.4vw solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
   border-radius: 50%;
   width: 5vw;
   height: 5vw;
   animation: spin 1s linear infinite;
-  margin: 0 auto; /* Center horizontally */
+  margin: 5vw auto;
 
   @keyframes spin {
     to { transform: rotate(360deg); }
@@ -127,7 +193,7 @@ function debounce(func, wait) {
   };
 }
 
-function TileGrid() {
+function TileGrid({ onWinner }) {
   const [selectedGameType, setSelectedGameType] = useState(gameTypes[0]);
   const [tiles, setTiles] = useState([]);
   const [activeView, setActiveView] = useState(STARTING_MODE);
@@ -176,23 +242,42 @@ function TileGrid() {
     resetGame();
   }, [selectedGameType, customCategory, apiKey, resetGame]);
 
+  useEffect(() => {
+    // Check if any team has reached their max
+    const redCount = tiles.filter((tile) => tile.revealed && tile.color === COLOR_RED).length;
+    const blueCount = tiles.filter((tile) => tile.revealed && tile.color === COLOR_BLUE).length;
+    const blackCount = tiles.filter((tile) => tile.revealed && tile.color === COLOR_BLACK).length;
+
+    if (redCount === STARTING_AMOUNTS[COLOR_RED]) {
+      onWinner?.(COLOR_RED);
+    } else if (blueCount === STARTING_AMOUNTS[COLOR_BLUE]) {
+      onWinner?.(COLOR_BLUE);
+    } else if (blackCount === STARTING_AMOUNTS[COLOR_BLACK]) {
+      onWinner?.(COLOR_BLACK);
+    } else {
+      onWinner?.(null);
+    }
+  }, [tiles, onWinner]);
+
   return (
     <div>
       {loading ? (
         <Spinner />
       ) : (
-        <Grid style={{backgroundColor: [...COLORS.filter(color => tiles.filter((tile) => tile.revealed && tile.color === color).length >= STARTING_AMOUNTS[color]), GRID_BACKGROUND_DEFAULT][0]}}>
+        <Grid>
           {tiles.map((tile, index) => (
             <Tile revealTile={() => revealTile(index)} key={index} color={tile.color} text={tile.text} colorRevealOverride={activeView === MODE_CLUE} revealed={tile.revealed} />
           ))}
         </Grid>
       )}
       <ScoreContainer>
-        {COLORS.filter(color => color !== COLOR_GREY).map(color => (
-            <p style={{color: color}} key={color}>
-            {color.slice(0, 1).toUpperCase() + color.slice(1)}: {tiles.filter((tile) => tile.revealed && tile.color === color).length}/{STARTING_AMOUNTS[color]}
-            </p>
-        ))}
+        <ColorContainer>
+          {COLORS.filter(color => color !== COLOR_GREY).map(color => (
+              <Color color={color} key={color}>
+                {color.slice(0, 1).toUpperCase() + color.slice(1)}: {tiles.filter((tile) => tile.revealed && tile.color === color).length}/{STARTING_AMOUNTS[color]}
+              </Color>
+          ))}
+        </ColorContainer>
         <TypeSelector value={selectedGameType} onChange={e => setSelectedGameType(e.target.value)} disabled={loading}>
           {gameTypes.filter(type => apiKey || type !== 'Custom').map((gameType, index) => (
             <option key={index} value={gameType}>

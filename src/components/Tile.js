@@ -1,27 +1,33 @@
 import React from 'react';
 import styled from 'styled-components';
+import { TILE_COLORS, DARK_TEXT_COLORS } from '../constants/colors';
 
 const TileContainer = styled.div`
   overflow: hidden;
-  width: 16vw;
-  height: 6vw;
+  width: 17vw;
+  height: 6.2vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   border-radius: 1vw;
-  margin: 0.2vw;
-  padding: 0.5vw 1vw;
+  margin: 0.1vw;
+  padding: 0.3vw 0.6vw;
   border-color: white;
   border-style: solid;
-  border-width: ${props => (props.revealed ? '0.1vw' : '0')}; 
-  background-color: ${props => getColor(props.color, props.colorRevealOverride || props.revealed)};
-  box-shadow: 0.3vw 0.3vw 0.8vw 0.01vw rgba(0, 0, 25, 0.25);
+  border-width: 0.2vw; 
+  background: ${props => getTileGradient(getColor(props.color, props.colorRevealOverride || props.revealed))};
+  box-shadow: rgba(0, 0, 0, 0.35);
   color: ${props => isDark(getColor(props.color, props.colorRevealOverride || props.revealed)) ? 'white' : 'black'};
   cursor: pointer;
   filter: ${props => (props.colorRevealOverride && props.revealed ? 'opacity(30%)' : 'none')}; 
+  transition: all 0.2s ease;
   &:hover {
-    filter: brightness(92%);
+    transform: translateY(-0.2vw);
+    box-shadow: 0.2vw 0.6vw 1.2vw rgba(0, 0, 0, 0.35);
+  }
+  &:active {
+    transform: translateY(0.1vw);
   }
 `;
 
@@ -36,18 +42,12 @@ const getColor = (color, isRevealed) => {
   return isRevealed ? color : 'white';
 }
 
+const getTileGradient = (color) => {
+  return TILE_COLORS[color] || TILE_COLORS.white;
+}
+
 const isDark = (color) => {
-  switch(color){
-    case 'red':
-    case 'blue':
-    case 'black':
-      return true;
-    case 'grey':
-    case 'white':
-      return false;
-    default:
-      return false;
-  }
+  return DARK_TEXT_COLORS.includes(color);
 }
 
 function Tile({ color, text, onColorChange, colorRevealOverride, revealed, revealTile }) {
